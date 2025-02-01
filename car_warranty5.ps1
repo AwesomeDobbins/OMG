@@ -24,15 +24,15 @@ Add-Type -TypeDefinition @"
         public int X;
         public int Y;
     }
-"@
+"@ -PassThru
 
 # Capture Initial Mouse Position
-[POINT]$initialMouse = 0
+$initialMouse = New-Object UserInput+POINT
 [UserInput]::GetCursorPos([ref]$initialMouse)
 
 # Wait for Mouse Movement Silently
 do {
-    [POINT]$currentMouse = 0
+    $currentMouse = New-Object UserInput+POINT
     [UserInput]::GetCursorPos([ref]$currentMouse)
     Start-Sleep -Milliseconds 500
 } while ($currentMouse.X -eq $initialMouse.X -and $currentMouse.Y -eq $initialMouse.Y)
