@@ -26,13 +26,15 @@ public static class UserInput {
 }
 "@ -PassThru
 
-# Capture Initial Mouse Position
+# Initialize Structs Before Using [ref]
 $initialMouse = New-Object POINT
+$currentMouse = New-Object POINT
+
+# Capture Initial Mouse Position
 [UserInput]::GetCursorPos([ref]$initialMouse)
 
 # Wait for Mouse Movement Silently
 do {
-    $currentMouse = New-Object POINT
     [UserInput]::GetCursorPos([ref]$currentMouse)
     Start-Sleep -Milliseconds 500
 } while ($currentMouse.X -eq $initialMouse.X -and $currentMouse.Y -eq $initialMouse.Y)
